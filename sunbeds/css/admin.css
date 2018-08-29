@@ -891,7 +891,8 @@ img {
   display: block; }
 
 .hide {
-  display: none; }
+  display: none;
+  }
 
 .invisible {
   opacity: 0; }
@@ -953,11 +954,12 @@ img {
 header {
   background: #fff;
   height: 50px;
-  padding-top: 5px;
+  /* padding-top: 5px; */
   width: 100%;
   position: fixed;
   z-index: 20;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); }
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  }
   header .wrapper {
     position: relative; }
   header .back {
@@ -1893,7 +1895,8 @@ body {
 
 .wrapper {
   min-width: 768px;
-  max-width: 960px; }
+  max-width: 960px;
+  }
 
 .wrapper-main {
   padding-bottom: 0;
@@ -2390,7 +2393,8 @@ a.edit-row {
     box-shadow: none;
     background: transparent; }
     .map-page header .back {
-      display: none; }
+      display: none;
+      }
   .map-page .wrapper-main {
     margin-top: -50px; }
     .map-page .wrapper-main .wrapper {
@@ -2850,13 +2854,14 @@ a.edit-row {
   display: none; }
 
 .map-wrapper {
-  overflow: hidden;
+  /* overflow: hidden; */
   position: relative;
   width: 100%;
   min-width: 768px;
   max-width: 960px;
   height: 420px;
-  margin-top: -40px; }
+  margin-top: -40px;
+  }
   .map-wrapper .beds {
     padding-top: 40px;
     max-width: none;
