@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slider Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+    body {
+      margin: 0;
+      height: 1000px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #canvas {
+      /* background-color: rgba(255,0,0,.1); */
+      position: absolute;
+      top: 510px;
+      left: 30px;
+      width: calc(100% - 60px);
+      height: 80px;
+      overflow: hidden;
+    }
+
+    input[type="range"] {
+      position: absolute;
+      top: 570px;
+      left: 30px;
+      width: calc(100% - 60px);
+      -webkit-appearance: none;
+    }
+    input[type=range]:focus {
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 0px;
+      cursor: pointer;
+      background: rgba(70, 113, 169, 0);
+      border-radius: 0px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      border: 0px solid #000000;
+      height: 35px;
+      width: 35px;
+      border-radius: 50px;
+      background: #e6e6e6;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -18.9px;
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+      background: rgba(81, 126, 183, 0);
+    }
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 0.2px;
+      cursor: pointer;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      background: rgba(70, 113, 169, 0);
+      border-radius: 0px;
+      border: 0px solid #010101;
+    }
+    input[type=range]::-moz-range-thumb {
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      border: 0px solid #000000;
+      height: 38px;
+      width: 38px;
+      border-radius: 50px;
+      background: #e6e6e6;
+      cursor: pointer;
+    }
+    input[type=range]::-ms-track {
+      width: 100%;
+      height: 0.2px;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
+    input[type=range]::-ms-fill-lower {
+      background: rgba(63, 101, 151, 0);
+      border: 0px solid #010101;
+      border-radius: 0px;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+    input[type=range]::-ms-fill-upper {
+      background: rgba(70, 113, 169, 0);
+      border: 0px solid #010101;
+      border-radius: 0px;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+    input[type=range]::-ms-thumb {
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      border: 0px solid #000000;
+      height: 38px;
+      width: 38px;
+      border-radius: 50px;
+      background: #e6e6e6;
+      cursor: pointer;
+      height: 0.2px;
+    }
+    input[type=range]:focus::-ms-fill-lower {
+      background: rgba(70, 113, 169, 0);
+    }
+    input[type=range]:focus::-ms-fill-upper {
+      background: rgba(81, 126, 183, 0);
+    }
+
+  </style>
+  <script src="paper-full.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <img clss="cover" src="img.png" width="100%">
+    <canvas id="canvas"></canvas>
+    <input id="price" type="range" v-model="value" min="13500" max="19500" step="1">
+  </div>
+
+  <script type="text/javascript">
+    var path;
+    var path2;
+    var text;
+    var canvas;
+
+    window.onload = function() {
+      canvas = document.getElementById('canvas');
+      paper.setup(canvas);
+      path = new paper.Path();
+      path2 = new paper.Path();
+      
+      document.getElementById('price').dispatchEvent(new Event('input'));
+    }
+
+    new Vue({
+      el: '#app',
+      data: {
+        value: 15500
+      },
+      watch: {
+        value() {
+          path.removeSegments();
+          path2.removeSegments();
+          if (text) {
+            text.remove();
+          }
+
+          var value = this.value;
+          var width = canvas.getBoundingClientRect().width;
+          var min = 13500;
+          var max = 19500;
+          
+    
+          var percent = (value - min) / (max - min);
+          var top = 53;
+          var offset = 35 / 2;
+          var position = (width * percent) + (offset * (0.5 - percent) * 2) + 2;
+    
+          path.strokeWidth = 1.5;
+          path.strokeColor = {
+              gradient: {
+                  stops: ['#b6161e', '#fd8288']
+              },
+              
+              origin: [0, 33],
+              destination: [0, 53]
+          };
+
+          path.add(new paper.Point(0, top));
+          path.add(new paper.Point(position - 60, top));
+          path.add(new paper.Point(position - 30, top - 5));
+          path.add(new paper.Point(position, top - 16));
+          path.add(new paper.Point(position + 30, top - 5));
+          path.add(new paper.Point(position + 60, top));
+          path.add(new paper.Point(width, top));
+    
+          path.smooth({
+            type: 'geometric',
+            factor: 0.4,
+            from: 1,
+            to: 5
+          });
+
+          path2.fillColor = 'black';
+
+          path2.add(new paper.Point(position, 30));
+          path2.add(new paper.Point(position - 10, 25));
+          path2.add(new paper.Point(position - 30, 25));
+          path2.add(new paper.Point(position - 30, 5));
+          path2.add(new paper.Point(position + 30, 5));
+          path2.add(new paper.Point(position + 30, 25));
+          path2.add(new paper.Point(position + 10, 25));
+          path2.add(new paper.Point(position, 30));
+
+          path2.smooth({
+            type: 'geometric',
+            factor: 0.3
+          });
+          
+          path2.closed = true;
+
+          text = new paper.PointText(new paper.Point(position, 18));
+          text.justification = 'center';
+          text.fillColor = 'white';
+          text.content = '€ ' + Math.round(value / 100);
+        }
+      }
+    });
+    
+    
+  </script>
+</body>
+</html>
